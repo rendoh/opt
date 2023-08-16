@@ -1,6 +1,6 @@
 [package]
 name = "opt"
-version = "0.0.0"
+version = "0.0.1"
 description = "A Tauri App"
 authors = ["you"]
 license = ""
@@ -13,7 +13,9 @@ edition = "2021"
 tauri-build = { version = "1.4", features = [] }
 
 [dependencies]
-tauri = { version = "1.4", features = [ "dialog-message", "path-all",
+tauri = { version = "1.4", features = [
+  "dialog-message",
+  "path-all",
   "dialog-open",
   "shell-open",
 ] }
