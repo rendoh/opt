@@ -62,11 +62,15 @@ function useOptimize() {
     if (!results) return;
     setResults(results);
   }, []);
+  const clear = useCallback(() => {
+    setResults(null);
+  }, []);
 
   return {
     run,
     isRunning,
     results,
+    clear,
   };
 }
 
@@ -87,13 +91,22 @@ const OptimizeProgress: FC<{ total: number }> = ({ total }) => {
 };
 
 export const App: FC = () => {
-  const { paths, targetImages, setTargetImages, clear } = useTargetImages();
-  const { run, isRunning, results } = useOptimize();
+  const {
+    paths,
+    targetImages,
+    setTargetImages,
+    clear: clearTargetImages,
+  } = useTargetImages();
+  const { run, isRunning, results, clear: clearResults } = useOptimize();
   const [options, setOptions] = useState<OptimizeOptions>(() => loadOptions());
   const handleClickRun = useCallback(async () => {
     if (!paths) return;
     run(paths, options);
   }, [paths, options, run]);
+  const handleClickClear = useCallback(() => {
+    clearTargetImages();
+    clearResults();
+  }, [clearTargetImages, clearResults]);
   return (
     <Layout side={<OptionEditor value={options} onChange={setOptions} />}>
       {targetImages ? (
@@ -137,7 +150,7 @@ export const App: FC = () => {
                 {targetImages.length > 1 && 's'} selected
               </p>
               <Button
-                onClick={clear}
+                onClick={handleClickClear}
                 disabled={isRunning}
                 icon={<VscRefresh />}
               >
