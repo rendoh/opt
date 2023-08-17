@@ -260,21 +260,6 @@ export const OptionEditor: FC<OptionEditorProps> = ({ value, onChange }) => (
     )}
     {value.generate_webp && (
       <>
-        <div>
-          <Label>WebP Quality</Label>
-          <Slider
-            min={1}
-            max={100}
-            step={1}
-            value={value.webp_quality}
-            onChange={(e) =>
-              onChange({
-                ...value,
-                webp_quality: e.target.valueAsNumber,
-              })
-            }
-          />
-        </div>
         {value.optimize_images && (
           <div>
             <Label>Generate WebP from</Label>
@@ -292,6 +277,21 @@ export const OptionEditor: FC<OptionEditorProps> = ({ value, onChange }) => (
             </Select>
           </div>
         )}
+        <div>
+          <Label>WebP Quality</Label>
+          <Slider
+            min={1}
+            max={100}
+            step={1}
+            value={value.webp_quality}
+            onChange={(e) =>
+              onChange({
+                ...value,
+                webp_quality: e.target.valueAsNumber,
+              })
+            }
+          />
+        </div>
       </>
     )}
   </div>

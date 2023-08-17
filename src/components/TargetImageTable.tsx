@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { css } from '../../styled-system/css';
 import { TargetImage } from '../optimize';
-import { kb } from '../utils';
+import { bytesToSize } from '../utils';
 import { Table } from './Table';
 
 export type TargetImageTableProps = {
@@ -29,7 +29,7 @@ export const TargetImageTable: FC<TargetImageTableProps> = ({
               whiteSpace: 'nowrap',
             })}
           >
-            {kb(targetImage.size)}
+            {bytesToSize(targetImage.size)}
           </td>
         </tr>
       ))}

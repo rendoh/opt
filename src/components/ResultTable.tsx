@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { css, cva } from '../../styled-system/css';
 import { OptimizeError, OptimizeResult } from '../optimize';
-import { kb } from '../utils';
+import { bytesToSize } from '../utils';
 import { Table } from './Table';
 
 export type ResultTableProps = {
@@ -27,11 +27,45 @@ const compressionRatioCell = cva({
   },
 });
 
+function calcReducedSize(results: (OptimizeResult | OptimizeError)[]) {
+  type Sizes = [original: number, final: number];
+  const [original, final] = results.reduce<Sizes>(
+    (acc, result) =>
+      result.type === 'result'
+        ? [acc[0] + result.original_size, acc[1] + result.final_size]
+        : acc,
+    [0, 0],
+  );
+  const compressionRatio = 1 - final / original;
+  return `${bytesToSize(original)} to ${bytesToSize(final)} (${Math.round(
+    compressionRatio * 100,
+  )}%)`;
+}
+
 export const ResultTable: FC<ResultTableProps> = ({ results }) => (
   <Table>
     <thead>
       <tr>
-        <th>File</th>
+        <th>
+          <span
+            className={css({
+              display: 'flex',
+              gap: '10px',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              w: '100%',
+            })}
+          >
+            File
+            <small
+              className={css({
+                fontSize: '0.9em',
+              })}
+            >
+              {calcReducedSize(results)}
+            </small>
+          </span>
+        </th>
         <th>Original</th>
         <th>Final</th>
         <th>CR</th>
@@ -54,7 +88,7 @@ export const ResultTable: FC<ResultTableProps> = ({ results }) => (
                     whiteSpace: 'nowrap',
                   })}
                 >
-                  {kb(result.original_size)}
+                  {bytesToSize(result.original_size)}
                 </td>
                 <td
                   className={css({
@@ -62,7 +96,7 @@ export const ResultTable: FC<ResultTableProps> = ({ results }) => (
                     whiteSpace: 'nowrap',
                   })}
                 >
-                  {kb(result.final_size)}
+                  {bytesToSize(result.final_size)}
                 </td>
                 <td
                   className={compressionRatioCell({

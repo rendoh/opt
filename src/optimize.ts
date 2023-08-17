@@ -45,12 +45,12 @@ export async function optimize(paths: string[], options: OptimizeOptions) {
 
 const defaultOptions: OptimizeOptions = {
   generate_webp: true,
-  jpg_quality: 90,
+  jpg_quality: 80,
   optimize_images: true,
-  png8_quality: 90,
+  png8_quality: 80,
   use_png8: false,
   webp_from_optimized: false,
-  webp_quality: 90,
+  webp_quality: 80,
 };
 
 export function saveOptions(options: OptimizeOptions) {

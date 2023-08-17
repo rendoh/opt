@@ -65,7 +65,7 @@ pub fn get_target_images(paths: Vec<&str>) -> Vec<TargetImage> {
         })
         .collect::<Vec<TargetImage>>();
 
-    target_images.sort_by(|a, b| a.path.cmp(&b.path));
+    target_images.sort_by(|a, b| a.path.to_lowercase().cmp(&b.path.to_lowercase()));
 
     target_images
 }
@@ -266,10 +266,10 @@ struct ProgressEventPayload {
     path: String,
 }
 
-fn get_path_from_result(result: &OptimizeResultOrError) -> &str {
+fn get_path_from_result(result: &OptimizeResultOrError) -> String {
     match result {
-        OptimizeResultOrError::Result(result) => &result.original_path,
-        OptimizeResultOrError::Error(error) => &error.path,
+        OptimizeResultOrError::Result(result) => result.original_path.to_lowercase(),
+        OptimizeResultOrError::Error(error) => error.path.to_lowercase(),
     }
 }
 
@@ -324,7 +324,7 @@ pub async fn optimize(
         })
         .collect();
 
-    result.sort_by(|a, b| get_path_from_result(a).cmp(get_path_from_result(b)));
+    result.sort_by(|a, b| get_path_from_result(a).cmp(&get_path_from_result(b)));
 
     std::result::Result::Ok(result)
 }
